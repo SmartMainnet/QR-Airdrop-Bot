@@ -31,6 +31,7 @@ function createConfigFromEnvironment(environment: NodeJS.ProcessEnv) {
     BOT_ALLOWED_UPDATES: z.array(z.enum(API_CONSTANTS.ALL_UPDATE_TYPES)).default([]),
     BOT_ADMINS: z.array(z.number()).default([]),
     INLINE_QUERY_CACHE_TIME: z.number().default(1),
+    REWARD: z.number(),
   })
 
   if (config.BOT_MODE === 'webhook') {

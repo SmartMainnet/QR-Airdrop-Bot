@@ -13,6 +13,7 @@ import {
   setReferralComplied,
 } from '../../../mongo/methods/index.js'
 import type { Context } from '../context.js'
+import { config } from '#root/config.js'
 
 const composer = new Composer<Context>()
 const feature = composer.chatType('private')
@@ -99,7 +100,7 @@ feature.callbackQuery(
         ctx.t('referral.complied', {
           link: `tg://user?id=${user.id}`,
           full_name: fullName,
-          amount: 50000,
+          amount: config.REWARD.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1,'),
         })
       )
       await openAirdropInfo(ctx)
