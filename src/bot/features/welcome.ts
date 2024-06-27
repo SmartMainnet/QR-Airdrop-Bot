@@ -100,7 +100,7 @@ feature.callbackQuery(
         ctx.t('referral.complied', {
           link: `tg://user?id=${user.id}`,
           full_name: fullName,
-          amount: config.REWARD.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1,'),
+          amount: config.REWARD,
         })
       )
       await openAirdropInfo(ctx)

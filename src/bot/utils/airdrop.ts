@@ -27,21 +27,17 @@ export const openAirdropInfo = async (ctx: Context) => {
   const compliedReferrals = referrals.filter(referral => referral.complied)
 
   await ctx.deleteMessage()
-  await ctx.replyWithPhoto(
-    'AgACAgIAAxkBAAMnZnI5UOmUWcsJAlrh3MCC5XQ3TQsAAqvbMRvH85BLKDGWA1ICNQIBAAMCAAN5AAM1BA',
-    {
-      caption: ctx.t('airdrop.info', {
-        balance: String(compliedReferrals.length * config.REWARD + config.REWARD)
-          .replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1,'),
-        amount: config.REWARD.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1,'),
-        referral_link: `https://t.me/${ctx.me.username}?start=${userId}`,
-        referrals: referrals.length,
-        complied_referrals: compliedReferrals.length,
-      }),
-      reply_markup: new InlineKeyboard()
-        .switchInline(ctx.t('button.send_invite'), String(userId))
-        .row()
-        .text(ctx.t('button.update'), 'update_airdrop_info'),
-    }
-  )
+  await ctx.replyWithPhoto(config.PHOTO, {
+    caption: ctx.t('airdrop.info', {
+      balance: compliedReferrals.length * config.REWARD + config.REWARD,
+      amount: config.REWARD,
+      referral_link: `https://t.me/${ctx.me.username}?start=${userId}`,
+      referrals: referrals.length,
+      complied_referrals: compliedReferrals.length,
+    }),
+    reply_markup: new InlineKeyboard()
+      .switchInline(ctx.t('button.send_invite'), String(userId))
+      .row()
+      .text(ctx.t('button.update'), 'update_airdrop_info'),
+  })
 }

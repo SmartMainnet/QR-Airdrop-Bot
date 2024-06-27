@@ -32,6 +32,11 @@ function createConfigFromEnvironment(environment: NodeJS.ProcessEnv) {
     BOT_ADMINS: z.array(z.number()).default([]),
     INLINE_QUERY_CACHE_TIME: z.number().default(1),
     REWARD: z.number(),
+    PHOTO: z
+      .string()
+      .default(
+        'AgACAgIAAxkBAAMnZnI5UOmUWcsJAlrh3MCC5XQ3TQsAAqvbMRvH85BLKDGWA1ICNQIBAAMCAAN5AAM1BA'
+      ),
   })
 
   if (config.BOT_MODE === 'webhook') {
