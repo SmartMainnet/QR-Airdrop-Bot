@@ -37,6 +37,12 @@ function createConfigFromEnvironment(environment: NodeJS.ProcessEnv) {
       .default(
         'AgACAgIAAxkBAAMnZnI5UOmUWcsJAlrh3MCC5XQ3TQsAAqvbMRvH85BLKDGWA1ICNQIBAAMCAAN5AAM1BA'
       ),
+    TONAPI_URL: z.string().default('https://tonapi.io/v2'),
+    TONAPI_KEY: z
+      .string()
+      .default(
+        'AFPJTKEBPOX3AIYAAAAKA2HWOTRNJP5MUCV5DMDCZAAOCPSAYEYS3CILNQVLF2HWKED6USY'
+      ),
   })
 
   if (config.BOT_MODE === 'webhook') {

@@ -1,5 +1,6 @@
-import { Composer } from 'grammy'
+import { Composer, InlineKeyboard } from 'grammy'
 import { limitMiddleware, logHandle } from '../helpers/index.js'
+import { WALLET_CONNECT_CONVERSATION } from '../conversations/index.js'
 import {
   checkSubscriptions,
   openAirdropCheck,
@@ -7,13 +8,15 @@ import {
 } from '../utils/index.js'
 import {
   createUser,
+  deleteWalletAddress,
   getDocumentByReferralUserId,
   getUserByUserId,
+  getWalletAddress,
   newReferral,
   setReferralComplied,
 } from '../../../mongo/methods/index.js'
-import type { Context } from '../context.js'
 import { config } from '#root/config.js'
+import type { Context } from '../context.js'
 
 const composer = new Composer<Context>()
 const feature = composer.chatType('private')
@@ -114,6 +117,53 @@ feature.callbackQuery(
   'update_airdrop_info',
   logHandle('keyboard-update-airdrop-info'),
   async ctx => {
+    await openAirdropInfo(ctx)
+  }
+)
+
+feature.callbackQuery(
+  'connect_wallet',
+  logHandle('keyboard-connect-wallet'),
+  async ctx => {
+    const { callback_query } = ctx.update
+    const userId = callback_query.from.id
+
+    const wallet = await getWalletAddress(userId)
+
+    if (wallet) {
+      await ctx.deleteMessage()
+      return await ctx.reply(ctx.t('connect.already_connected'), {
+        reply_markup: new InlineKeyboard().text(
+          ctx.t('button.back'),
+          'update_airdrop_info'
+        ),
+      })
+    }
+
+    await ctx.conversation.enter(WALLET_CONNECT_CONVERSATION)
+  }
+)
+
+feature.callbackQuery(
+  'disconnect_wallet',
+  logHandle('keyboard-disconnect-wallet'),
+  async ctx => {
+    const { callback_query } = ctx.update
+    const userId = callback_query.from.id
+
+    const wallet = await getWalletAddress(userId)
+
+    if (!wallet) {
+      await ctx.deleteMessage()
+      return await ctx.reply(ctx.t('connect.already_disconnected'), {
+        reply_markup: new InlineKeyboard().text(
+          ctx.t('button.back'),
+          'update_airdrop_info'
+        ),
+      })
+    }
+
+    await deleteWalletAddress(userId)
     await openAirdropInfo(ctx)
   }
 )

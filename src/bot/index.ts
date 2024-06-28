@@ -1,9 +1,10 @@
-import { MemorySessionStorage, Bot as TelegramBot, session } from 'grammy'
+import { Bot as TelegramBot, session } from 'grammy'
 import type { BotConfig, StorageAdapter } from 'grammy'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
 import { hydrate } from '@grammyjs/hydrate'
 import { hydrateReply, parseMode } from '@grammyjs/parse-mode'
-import type { ChatMember } from '@grammyjs/types'
+import { conversations } from '@grammyjs/conversations'
+import { walletConnectConversation } from './conversations/index.js'
 import type { Context, SessionData } from '#root/bot/context.js'
 import { createContextConstructor } from '#root/bot/context.js'
 import {
@@ -51,6 +52,8 @@ export function createBot(token: string, options: Options = {}) {
   )
   protectedBot.use(inviteFeature)
   protectedBot.use(i18n)
+  protectedBot.use(conversations())
+  protectedBot.use(walletConnectConversation())
 
   // Handlers
   protectedBot.use(welcomeFeature)
