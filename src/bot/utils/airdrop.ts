@@ -49,11 +49,13 @@ export const openAirdropInfo = async (ctx: Context) => {
       complied_referrals: compliedReferrals.length,
     }),
     reply_markup: new InlineKeyboard()
+      .webApp('Таблица лидеров', `${config.LEADERBOARD}?user_id=${userId}`)
+      .row()
       .switchInline(ctx.t('button.send_invite'), String(userId))
       .row()
       .text(
-        wallet ? ctx.t('button.disconnect') : ctx.t('button.connect'),
-        wallet ? 'disconnect_wallet' : 'connect_wallet'
+        wallet ? ctx.t('button.change') : ctx.t('button.connect'),
+        wallet ? 'change_wallet' : 'connect_wallet'
       )
       .row()
       .text(ctx.t('button.update'), 'update_airdrop_info'),

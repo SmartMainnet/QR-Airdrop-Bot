@@ -8,7 +8,6 @@ import {
 } from '../utils/index.js'
 import {
   createUser,
-  deleteWalletAddress,
   getDocumentByReferralUserId,
   getUserByUserId,
   getWalletAddress,
@@ -145,26 +144,29 @@ feature.callbackQuery(
 )
 
 feature.callbackQuery(
-  'disconnect_wallet',
-  logHandle('keyboard-disconnect-wallet'),
+  'change_wallet',
+  logHandle('keyboard-change-wallet'),
+  async ctx => await ctx.conversation.enter(WALLET_CONNECT_CONVERSATION)
+)
+
+feature.callbackQuery(
+  ['add_address', 'select_address', 'disconnect_wallet', 'back_to_airdrop_info'],
+  logHandle('keyboard-old'),
   async ctx => {
     const { callback_query } = ctx.update
     const userId = callback_query.from.id
 
-    const wallet = await getWalletAddress(userId)
+    const document = await getDocumentByReferralUserId(userId)
 
-    if (!wallet) {
-      await ctx.deleteMessage()
-      return await ctx.reply(ctx.t('connect.already_disconnected'), {
-        reply_markup: new InlineKeyboard().text(
-          ctx.t('button.back'),
-          'update_airdrop_info'
-        ),
-      })
+    if (!document) {
+      await ctx.reply(ctx.t('airdrop.uninvited'))
+    } else {
+      if (!document.complied) {
+        await openAirdropCheck(ctx)
+      } else {
+        await openAirdropInfo(ctx)
+      }
     }
-
-    await deleteWalletAddress(userId)
-    await openAirdropInfo(ctx)
   }
 )
 

@@ -23,10 +23,10 @@ button =
     .check_subscriptions = Проверить подписки
     .send_invite = Отправить приглашение
     .update = Обновить
-    .connect = Подключить кошелёк
-    .disconnect = Отключить кошелёк
+    .connect = Добавить адрес кошелька
+    .change = Изменить адрес кошелька
     .select_address = Изменить адрес кошелька
-    .add_address = ✅ Подключить
+    .add_address = ✅ Подтвердить
     .cancel = ❌ Отменить
     .back = « Назад
 

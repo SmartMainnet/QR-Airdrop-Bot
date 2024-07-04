@@ -43,6 +43,7 @@ function createConfigFromEnvironment(environment: NodeJS.ProcessEnv) {
       .default(
         'AFPJTKEBPOX3AIYAAAAKA2HWOTRNJP5MUCV5DMDCZAAOCPSAYEYS3CILNQVLF2HWKED6USY'
       ),
+    LEADERBOARD: z.string().default('https://next-leaderboard.vercel.app'),
   })
 
   if (config.BOT_MODE === 'webhook') {
